@@ -120,5 +120,5 @@ class ForgotPasswordSerializer(serializers.ModelSerializer):
     pass
 
 class ResetPasswordSerializer(serializers.ModelSerializer):
-    passs
+    pass
 
