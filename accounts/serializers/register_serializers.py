@@ -1,11 +1,15 @@
 from rest_framework import serializers
 from django.contrib.auth.password_validation import validate_password
-from .models import CustomUser
+from accounts.models import CustomUser
+from django.core.validators import RegexValidator
 
-
+phone_validator = RegexValidator(
+    regex=r'^\+998\d{9}$',
+    message="Format: +998XXXXXXXXX"
+)
 
 class RegisterUserSerializer(serializers.ModelSerializer):
-    # phoneni  regex bilan qoshish kerak
+    phone = serializers.CharField(required=True, validators=[phone_validator])
     password = serializers.CharField(required=True, write_only=True, validators=[validate_password])
     password2 = serializers.CharField(required=True, write_only=True)
 
@@ -35,7 +39,7 @@ class RegisterUserSerializer(serializers.ModelSerializer):
 
 
 class RegisterBusinessSerializer(serializers.ModelSerializer):
-    # phoneni  regex bilan qoshish kerak
+    phone = serializers.CharField(required=True, validators=[phone_validator])
     password = serializers.CharField(required=True, write_only=True, validators=[validate_password])
     password2 = serializers.CharField(required=True, write_only=True)
 
@@ -65,60 +69,3 @@ class RegisterBusinessSerializer(serializers.ModelSerializer):
 
         user = CustomUser.objects.create_user(**validated_data)
         return user
-
-
-class UserProfileSerializer(serializers.ModelSerializer):
-    full_name = serializers.SerializerMethodField(read_only=True)
-
-    class Meta:
-        model = CustomUser
-        fields = [
-            'id', 'full_name', 'first_name', 'last_name',
-            'phone',                    # read_only
-            'city', 'district',
-            'email',                    # ixtiyoriy
-            'birth_date',               # ixtiyoriy
-            'language',                 # UZ/RU/EN
-            'avatar',
-            'user_type',                # read_only
-            'status',                   # read_only
-            'date_joined',              # read_only
-        ]
-        read_only_fields = [
-            'id', 'phone', 'user_type',
-            'status', 'date_joined', 'full_name'
-        ]
-
-    def get_full_name(self, obj):
-        return obj.full_name
-
-    def update(self, instance, validated_data):
-        for key, value in validated_data.items():
-            setattr(instance, key, value)
-        instance.save()
-        return instance
-
-
-
-class LoginSerializer(serializers.ModelSerializer):
-    pass
-
-
-class OTPVerifySerializer(serializers.ModelSerializer):
-    pass
-
-
-class ResendOTPSerializer(serializers.ModelSerializer):
-    pass
-
-
-class ChangePasswordSerializer(serializers.ModelSerializer):
-    pass
-
-
-class ForgotPasswordSerializer(serializers.ModelSerializer):
-    pass
-
-class ResetPasswordSerializer(serializers.ModelSerializer):
-    pass
-
