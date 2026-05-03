@@ -8,7 +8,7 @@ ATTEMPT_LIMIT = 3
 
 
 def generate_otp():
-    return str(random.randint(000000, 999999))
+    return str(random.randint(100000, 999999))
 
 
 def send_otp(phone: str):
@@ -56,17 +56,4 @@ def verify_otp(phone: str, code: str):
     cache.delete(f"otp:resend:{phone}")
 
     return {"success": True}
-
-
-
-
-
-
-
-
-
-
-
-
-
 
