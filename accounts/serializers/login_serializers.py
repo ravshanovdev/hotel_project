@@ -13,9 +13,22 @@ class LoginSerializer(serializers.Serializer):
     password = serializers.CharField(required=True, write_only=True)
     phone = serializers.CharField(required=True, write_only=True, validators=[phone_validator])
 
-    class Meta:
-        model = CustomUser
-        fields = ('id', 'phone', 'password')
+
+    def validate(self, attrs):
+        phone = attrs.get('phone')
+        password = attrs.get('password')
+
+        try:
+            user = CustomUser.objects.get(phone=phone)
+        except CustomUser.DoesNotExist:
+            raise serializers.ValidationError("Phone not found.")
+
+
+        if not user.check_password(password):
+            raise serializers.ValidationError("password incorrect")
+
+        attrs['user'] = user
+        return attrs
 
 
 

@@ -1,5 +1,6 @@
 import random
 from django.core.cache import cache
+import secrets
 
 
 OTP_EXPIRE = 60 * 5
@@ -8,7 +9,7 @@ ATTEMPT_LIMIT = 3
 
 
 def generate_otp():
-    return str(random.randint(100000, 999999))
+    return str(secrets.randbelow(900000) + 100000)
 
 
 def send_otp(phone: str):
@@ -21,11 +22,13 @@ def send_otp(phone: str):
 
 
     code = generate_otp()
+    print(code)
 
     cache.set(f"otp:{phone}", code, timeout=OTP_EXPIRE)
 
     cache.set(resend_key, resend_count + 1, timeout=OTP_EXPIRE)
 
+    cache.delete(f"otp:attempts:{phone}")
     # hullas bu yerda eskiz.uz kerak
     # send_sms(phone, f"UzEvently: tasdiqlash kodingiz {code}")
 

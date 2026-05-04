@@ -25,10 +25,14 @@ class RegisterUserAPIView(APIView):
 
         result = send_otp(user.phone)
 
-        if result['success']:
+        if not result['success']:
+            user.delete()
             return Response({"error": result['error']}, status=status.HTTP_400_BAD_REQUEST)
 
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response({
+            "message": "OTP sent successfully",
+            "phone": user.phone
+        }, status=status.HTTP_201_CREATED)
 
 
 class RegisterBusinessAPIView(APIView):
@@ -49,9 +53,13 @@ class RegisterBusinessAPIView(APIView):
 
         result = send_otp(user.phone)
 
-        if result['success']:
+        if not result['success']:
+            user.delete()
             return Response({"error": result['error']}, status=status.HTTP_400_BAD_REQUEST)
 
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response({
+            "message": "OTP sent successfully",
+            "phone": user.phone
+        }, status=status.HTTP_201_CREATED)
 
 

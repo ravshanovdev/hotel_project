@@ -14,16 +14,17 @@ phone_validator = RegexValidator(
 class CustomUserManager(BaseUserManager):
     def create_user(self, phone, password=None, **extra_fields):
         if not phone:
-            raise ValueError('Telefon raqam majburiy')
-        phone = phone.strip()
+            raise ValueError("phone is required.!")
+
         user = self.model(phone=phone, **extra_fields)
         user.set_password(password)
-        user.save(using=self._db)
+        user.save()
         return user
 
     def create_superuser(self, phone, password=None, **extra_fields):
         extra_fields.setdefault('is_staff', True)
         extra_fields.setdefault('is_superuser', True)
+        extra_fields.setdefault('is_active', True)
         return self.create_user(phone, password, **extra_fields)
 
 
@@ -80,9 +81,9 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     first_name = models.CharField(max_length=100)
     last_name = models.CharField(max_length=100)
     city = models.CharField(max_length=100, blank=True)
-    district = models.CharField(max_length=100, blank=True)       # TZ: Shahar/Tuman
-    email = models.EmailField(blank=True, null=True)            # TZ: ixtiyoriy
-    birth_date = models.DateField(blank=True, null=True)             # TZ: bayram taklifi uchun
+    district = models.CharField(max_length=100, blank=True)
+    email = models.EmailField(blank=True, null=True)
+    birth_date = models.DateField(blank=True, null=True)
     language = models.CharField(max_length=5,
                                     choices=[('uz','UZ'),('ru','RU'),('en','EN')],
                                     default='uz')
@@ -95,7 +96,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     legal_address= models.CharField(max_length=255, blank=True)
 
     # --- Tizim fieldlari ---
-    is_active = models.BooleanField(default=True)
+    is_active = models.BooleanField(default=False)
     is_staff = models.BooleanField(default=False)
     date_joined = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
