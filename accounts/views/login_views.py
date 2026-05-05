@@ -4,7 +4,7 @@ from rest_framework import status
 from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
 from accounts.serializers.login_serializers import LoginSerializer
-from rest_framework.permissions import AllowAny
+from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework_simplejwt.tokens import RefreshToken
 
 
@@ -43,4 +43,15 @@ class LoginAPIView(APIView):
 
 
 
+class ListAllUsers(APIView):
+    permission_classes = [IsAuthenticated]
+
+    @swagger_auto_schema(
+        tags=['debugging'],
+    )
+    def get(self, request):
+        from accounts.models import CustomUser
+        users = CustomUser.objects.all()
+        data = [{"id": user.id, "phone": user.phone} for user in users]
+        return Response(data, status=status.HTTP_200_OK)
 

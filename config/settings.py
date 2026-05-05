@@ -66,6 +66,13 @@ TEMPLATES = [
     },
 ]
 
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ]
+}
+
+
 WSGI_APPLICATION = 'config.wsgi.application'
 
 from datetime import timedelta
@@ -77,6 +84,7 @@ SIMPLE_JWT = {
     "ROTATE_REFRESH_TOKENS": False,
     "BLACKLIST_AFTER_ROTATION": False,
     "UPDATE_LAST_LOGIN": False,
+    "AUTH_HEADER_TYPES": ("Bearer",),
 }
 
 
@@ -96,11 +104,13 @@ SWAGGER_SETTINGS = {
     'SECURITY_DEFINITIONS': {
         'Bearer': {
             'type': 'apiKey',
-            'name': 'Authorization',
             'in': 'header',
-            'description': "JWT token format: **Bearer &lt;your_token&gt;**"
+            'name': 'Authorization',
         }
-    }
+    },
+    'SECURITY_REQUIREMENTS': [
+        {'Bearer': []}
+    ],
 }
 
 
