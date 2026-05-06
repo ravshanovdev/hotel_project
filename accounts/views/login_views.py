@@ -6,10 +6,18 @@ from drf_yasg import openapi
 from accounts.serializers.login_serializers import LoginSerializer
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework_simplejwt.tokens import RefreshToken
+from rest_framework.throttling import AnonRateThrottle
+
+
+
+class LoginThrottle(AnonRateThrottle):
+    rate = "10/min"
+
 
 
 class LoginAPIView(APIView):
     permission_classes = [AllowAny]
+    throttle_classes = [LoginThrottle]
 
     @swagger_auto_schema(
         tags=['accounts'],

@@ -74,8 +74,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     phone = models.CharField(max_length=13, unique=True,
                                     db_index=True, validators=[phone_validator])
 
-    status = models.CharField(max_length=20, choices=Status.choices,
-                                    default=Status.PENDING)
+    status = models.CharField(max_length=20, choices=Status.choices)
 
     # --- Shaxsiy ma'lumotlar ---
     first_name = models.CharField(max_length=100)
