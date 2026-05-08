@@ -6,25 +6,16 @@ from django.core.cache import cache
 
 def get_request_count(phone):
     key = f"user_requests:{phone}"
-
     count = cache.get(key, 0) + 1
     cache.set(key, count, timeout=86400)
 
-    if count >= 10:
+    if count == 10:
         cache.set(f"blocked:{phone}", "24h", timeout=86400)
+        return {"success": False, "detail": "24 hours block"}
 
-        return {
-            "success": False,
-            "detail": "24 hours block"
-        }
-
-    if count >= 5:
-        cache.set(f"blocked:{phone}", "15m", timeout=900)
-
-        return {
-            "success": False,
-            "detail": "15 minutes block"
-        }
+    if count == 5:
+        cache.set(f"blocked:{phone}", "15m", timeout=120)
+        return {"success": False, "detail": "15 minutes block"}
 
     return {"success": True}
 
@@ -44,7 +35,6 @@ class LoginSerializer(serializers.Serializer):
         password = attrs.get('password')
 
         blocked = cache.get(f"blocked:{phone}")
-        print(blocked)
 
         if blocked == "24h":
             raise serializers.ValidationError(
