@@ -57,8 +57,8 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
         blank=True,  # oddiy user uchun bo'sh
         null=True
     )
-    # admin uchun -> is_staff=True, is_superuser=True
 
+    # For PermissionMixin
     groups = models.ManyToManyField(
         'auth.Group',
         blank=True,
@@ -69,6 +69,8 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
         blank=True,
         related_name='custom_user_set'  
     )
+    # groups and user_permissions
+
 
     # --- Asosiy fieldlar ---
     phone = models.CharField(max_length=13, unique=True,

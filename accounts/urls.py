@@ -3,6 +3,7 @@ from accounts.views.register_views import RegisterUserAPIView, RegisterBusinessA
 from accounts.views.login_views import LoginAPIView, ListAllUsers
 from accounts.views.otp_views import VerifyOtpAPIView, ResendOtpAPIView
 from accounts.views.password_views import ChangePasswordAPIView, ForgotPasswordAPIView, ResetPasswordAPIView
+from accounts.views.profile_views import GetMyProfileAPIView, UpdateMyProfileAPIView
 
 
 urlpatterns = [
@@ -19,6 +20,10 @@ urlpatterns = [
     path('auth/change-password/', ChangePasswordAPIView.as_view(), name='change-password'),
     path('auth/forgot-password/', ForgotPasswordAPIView.as_view(), name='forgot-password'),
     path('auth/reset-password/', ResetPasswordAPIView.as_view(), name='reset-password'),
+
+    # profile
+    path("auth/profile/", GetMyProfileAPIView.as_view(), name='my-profile'),
+    path("auth/update-profile/", UpdateMyProfileAPIView.as_view(), name='update-profile'),
 
     # debugging
     path('list-all-users/', ListAllUsers.as_view(), ),
