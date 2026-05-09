@@ -3,8 +3,9 @@ from rest_framework.response import Response
 from rest_framework import status
 from drf_yasg.utils import swagger_auto_schema
 from accounts.serializers.register_serializers import RegisterUserSerializer, RegisterBusinessSerializer
-from rest_framework.permissions import AllowAny
+from rest_framework.permissions import AllowAny, IsAuthenticated
 from accounts.utils.otp import send_otp
+from rest_framework_simplejwt.tokens import RefreshToken
 
 
 class RegisterUserAPIView(APIView):
@@ -61,5 +62,20 @@ class RegisterBusinessAPIView(APIView):
             "message": "OTP sent successfully",
             "phone": user.phone
         }, status=status.HTTP_201_CREATED)
+
+
+class LogoutAPIView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    @swagger_auto_schema(
+        tags=['accounts'],
+        responses={
+            200: "logged out"
+        }
+    )
+    def get(self, request):
+        token = RefreshToken(request.data['refresh'])
+        token.blacklist()
+        return Response({"message": "Logged out"}, status=status.HTTP_200_OK)
 
 

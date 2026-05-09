@@ -6,6 +6,7 @@ from rest_framework.permissions import IsAuthenticated
 from drf_yasg.utils import swagger_auto_schema
 from accounts.serializers.profile_serializers import ProfileSerializer
 from accounts.models import CustomUser
+from django.utils import timezone
 
 
 class GetMyProfileAPIView(APIView):
@@ -56,25 +57,28 @@ class UpdateMyProfileAPIView(APIView):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 
-# hullas bu delete qilish uchun admin tasdiqlashi kerak yoki 30 kun kutishi kerak. buni logikasini chiqarish kerak
-# class DeleteMyProfileAPIView(APIView):
-#     permission_classes = [IsAuthenticated, IsAdminUser]
-#
-#     @swagger_auto_schema(
-#         tags=['accounts'],
-#         responses={
-#             200: 'profile successfully deleted',
-#             404: 'profile not found'
-#         }
-#     )
-#     def delete(self, request):
-#         try:
-#             user = CustomUser.objects.get(id=request.user.id)
-#         except CustomUser.DoesNotExist:
-#             return Response({"error": "profile not found"}, status=status.HTTP_404_NOT_FOUND)
-#
-#         user.delete()
-#
-#         return Response({"message": "profile successfully deleted"}, status=status.HTTP_200_OK)
-#
+
+# user delete qilgandan keyin login qila oladimi .? va yoki bu buyruqni bekor qila oladimi ?
+class DeleteMyProfileAPIView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    @swagger_auto_schema(
+        tags=['accounts'],
+        responses={
+            200: 'profile successfully deleted',
+            404: 'profile not found'
+        }
+    )
+    def delete(self, request):
+        try:
+            user = CustomUser.objects.get(id=request.user.id)
+        except CustomUser.DoesNotExist:
+            return Response({"error": "profile not found"}, status=status.HTTP_404_NOT_FOUND)
+
+        user.is_active = False
+        user.deletion_requested_at = timezone.now()
+        user.save()
+
+        return Response({"message": "Your account deletion request has been submitted. "
+                                         "Your account will be deleted within 30 days."}, status=status.HTTP_200_OK)
 

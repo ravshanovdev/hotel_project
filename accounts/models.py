@@ -101,6 +101,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     is_staff = models.BooleanField(default=False)
     date_joined = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    deletion_requested_at = models.DateTimeField(null=True, blank=True)
 
     USERNAME_FIELD  = 'phone'
     REQUIRED_FIELDS = []
