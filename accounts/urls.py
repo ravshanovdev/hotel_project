@@ -3,7 +3,8 @@ from accounts.views.register_views import RegisterUserAPIView, RegisterBusinessA
 from accounts.views.login_views import LoginAPIView, ListAllUsers
 from accounts.views.otp_views import VerifyOtpAPIView, ResendOtpAPIView
 from accounts.views.password_views import ChangePasswordAPIView, ForgotPasswordAPIView, ResetPasswordAPIView
-from accounts.views.profile_views import GetMyProfileAPIView, UpdateMyProfileAPIView, DeleteMyProfileAPIView
+from accounts.views.profile_views import (GetMyProfileAPIView, UpdateMyProfileAPIView, DeleteMyProfileAPIView,
+                                          ListMySessionAPIView, EndMySessionAPIView)
 
 
 urlpatterns = [
@@ -26,6 +27,8 @@ urlpatterns = [
     path("auth/profile/", GetMyProfileAPIView.as_view(), name='my-profile'),
     path("auth/update-profile/", UpdateMyProfileAPIView.as_view(), name='update-profile'),
     path("auth/delete-profile/", DeleteMyProfileAPIView.as_view(), name='delete-profile'),
+    path('auth/list-my-session/', ListMySessionAPIView.as_view(), name='list-my-sessions'),
+    path('auth/end-my-session/<int:session_id>/', EndMySessionAPIView.as_view(), name='end-my-sessions'),
 
     # debugging
     path('list-all-users/', ListAllUsers.as_view(), ),
