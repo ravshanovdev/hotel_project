@@ -6,6 +6,7 @@ from drf_yasg import openapi
 from accounts.serializers.otp_serializers import OTPVerifySerializer, ResendOTPSerializer
 from rest_framework.permissions import AllowAny
 from rest_framework_simplejwt.tokens import RefreshToken
+from accounts.models import UserSession
 
 
 class VerifyOtpAPIView(APIView):
@@ -30,11 +31,26 @@ class VerifyOtpAPIView(APIView):
         serializer = OTPVerifySerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         user = serializer.validated_data['user']
+        device_id = serializer.validated_data.get('device_id')
 
         user.is_active = True
         user.save()
 
         token = RefreshToken.for_user(user)
+
+        user_sessions = UserSession.objects.filter(user=user).count()
+
+        if user_sessions >= 5:
+            return Response({"error": "Maximum 5 active sessions allowed"}, status=status.HTTP_400_BAD_REQUEST)
+
+        UserSession.objects.update_or_create(
+            user=user,
+            device_id=device_id,
+            defaults={
+                'jti': token['jti']
+            }
+        )
+
 
         return Response(
             {

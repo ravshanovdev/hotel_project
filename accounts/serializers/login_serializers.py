@@ -14,7 +14,7 @@ def get_request_count(phone):
         return {"success": False, "detail": "24 hours block"}
 
     if count == 5:
-        cache.set(f"blocked:{phone}", "15m", timeout=120)
+        cache.set(f"blocked:{phone}", "15m", timeout=900)
         return {"success": False, "detail": "15 minutes block"}
 
     return {"success": True}
@@ -27,6 +27,7 @@ phone_validator = RegexValidator(
 
 
 class LoginSerializer(serializers.Serializer):
+    device_id = serializers.CharField(required=False, write_only=True)
     password = serializers.CharField(required=True, write_only=True)
     phone = serializers.CharField(required=True, write_only=True, validators=[phone_validator])
 

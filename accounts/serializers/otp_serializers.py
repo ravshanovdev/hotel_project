@@ -12,6 +12,7 @@ phone_validator = RegexValidator(
 class OTPVerifySerializer(serializers.Serializer):
     phone = serializers.CharField(validators=[phone_validator])
     code = serializers.RegexField(r'^\d{6}$')
+    device_id = serializers.CharField(required=True, write_only=True)
 
     def validate(self, attrs):
         phone = attrs.get('phone')

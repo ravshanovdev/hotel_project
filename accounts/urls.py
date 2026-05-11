@@ -28,7 +28,7 @@ urlpatterns = [
     path("auth/update-profile/", UpdateMyProfileAPIView.as_view(), name='update-profile'),
     path("auth/delete-profile/", DeleteMyProfileAPIView.as_view(), name='delete-profile'),
     path('auth/list-my-session/', ListMySessionAPIView.as_view(), name='list-my-sessions'),
-    path('auth/end-my-session/<int:session_id>/', EndMySessionAPIView.as_view(), name='end-my-sessions'),
+    path('auth/end-my-session/<str:jti>/', EndMySessionAPIView.as_view(), name='end-my-sessions'),
 
     # debugging
     path('list-all-users/', ListAllUsers.as_view(), ),

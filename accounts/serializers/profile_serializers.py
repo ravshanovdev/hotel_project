@@ -1,6 +1,5 @@
 from rest_framework import serializers
-from accounts.models import CustomUser
-from rest_framework_simplejwt.tokens import OutstandingToken
+from accounts.models import CustomUser, UserSession
 
 
 class ProfileSerializer(serializers.ModelSerializer):
@@ -12,12 +11,11 @@ class ProfileSerializer(serializers.ModelSerializer):
         read_only_fields = ['id', 'user_type', 'staff_role', 'phone', 'status']
 
 
-class OutstandingTokenSerializer(serializers.ModelSerializer):
+
+
+class UserSessionSerializer(serializers.ModelSerializer):
     class Meta:
-        model = OutstandingToken
-        fields = ['id', 'user', 'jti', 'token', 'created_at', 'expires_at']
-        read_only_fields = ['id', 'user', 'jti', 'token', 'created_at', 'expires_at']
-
-
-
+        model = UserSession
+        fields = ['id', 'user', 'device_id', 'jti', 'created_at', 'updated_at']
+        read_only_fields = ['id', 'user', 'jti', 'created_at', 'updated_at']
 

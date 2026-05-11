@@ -4,10 +4,10 @@ from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
 from drf_yasg.utils import swagger_auto_schema
-from accounts.serializers.profile_serializers import ProfileSerializer, OutstandingTokenSerializer
-from accounts.models import CustomUser
+from accounts.serializers.profile_serializers import ProfileSerializer, UserSessionSerializer
+from accounts.models import CustomUser, UserSession
 from django.utils import timezone
-from rest_framework_simplejwt.tokens import OutstandingToken, BlacklistedToken
+from rest_framework_simplejwt.tokens import BlacklistedToken, OutstandingToken
 
 
 class GetMyProfileAPIView(APIView):
@@ -91,13 +91,13 @@ class ListMySessionAPIView(APIView):
     @swagger_auto_schema(
         tags=['profile'],
         responses={
-            200: OutstandingTokenSerializer,
+            200: UserSessionSerializer,
             400: "Bad Request"
         }
     )
     def get(self, request):
-        active_sessions = OutstandingToken.objects.filter(user=request.user)
-        serializer = OutstandingTokenSerializer(active_sessions, many=True)
+        active_sessions = UserSession.objects.filter(user=request.user)
+        serializer = UserSessionSerializer(active_sessions, many=True)
 
         return Response(serializer.data, status=status.HTTP_200_OK)
 
@@ -114,16 +114,24 @@ class EndMySessionAPIView(APIView):
             404: "session not found"
         }
     )
-    def delete(self, request, session_id):
+    def delete(self, request, jti):
         try:
-            session_token = OutstandingToken.objects.get(id=session_id)
-        except OutstandingToken.DoesNotExist:
+            session_token = UserSession.objects.get(user=request.user, jti=jti)
+        except UserSession.DoesNotExist:
             return Response({"error": "session not found"}, status=status.HTTP_404_NOT_FOUND)
 
-        blacklisted, created = BlacklistedToken.objects.get_or_create(token=session_token)
+        try:
+            active_token = OutstandingToken.objects.get(user=request.user, jti=jti)
+        except OutstandingToken.DoesNotExist:
+            return Response({"error": "active token not found"}, status=status.HTTP_404_NOT_FOUND)
+
+
+        blacklisted, created = BlacklistedToken.objects.get_or_create(token=active_token)
 
         if not created:
-            return Response({"error": "Session already ended"}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({"message": "Token is already blacklisted"}, status=status.HTTP_200_OK)
 
-        return Response({"message": "Token has been blacklisted"}, status=status.HTTP_200_OK)
+        session_token.delete()
+
+        return Response({"message": "Session ended successfully"}, status=status.HTTP_200_OK)
 

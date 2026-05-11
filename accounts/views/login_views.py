@@ -7,7 +7,7 @@ from accounts.serializers.login_serializers import LoginSerializer
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.throttling import AnonRateThrottle
-
+from accounts.models import UserSession
 
 
 class LoginThrottle(AnonRateThrottle):
@@ -38,8 +38,22 @@ class LoginAPIView(APIView):
         serializer = LoginSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         user = serializer.validated_data['user']
+        device_id = serializer.validated_data.get('device_id')
 
         token = RefreshToken.for_user(user)
+
+        user_sessions = UserSession.objects.filter(user=user).count()
+
+        if user_sessions >= 5:
+            return Response({"error": "Maximum 5 active sessions allowed"}, status=status.HTTP_400_BAD_REQUEST)
+
+        UserSession.objects.update_or_create(
+            user=user,
+            device_id=device_id,
+            defaults={
+                'jti': token['jti']
+            }
+        )
 
         return Response(
             {
@@ -62,4 +76,3 @@ class ListAllUsers(APIView):
         users = CustomUser.objects.all()
         data = [{"id": user.id, "phone": user.phone} for user in users]
         return Response(data, status=status.HTTP_200_OK)
-

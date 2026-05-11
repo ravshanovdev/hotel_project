@@ -139,3 +139,16 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     @property
     def is_approved(self):
         return self.status == self.Status.APPROVED
+
+
+
+class UserSession(models.Model):
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='sessions')
+    device_id = models.CharField(max_length=255, blank=True, null=True)
+    jti = models.CharField(max_length=255)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return self.user.phone + " - " + self.device_id
+

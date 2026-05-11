@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
-from .models import CustomUser
+from .models import CustomUser, UserSession
 
 
 @admin.register(CustomUser)
@@ -24,3 +24,6 @@ class CustomUserAdmin(UserAdmin):
     )
     ordering = ['phone']
     search_fields = ['phone', 'first_name', 'last_name']
+
+
+admin.site.register(UserSession)
