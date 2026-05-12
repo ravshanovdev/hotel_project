@@ -73,7 +73,7 @@ class LogoutAPIView(APIView):
             200: "logged out"
         }
     )
-    def get(self, request):
+    def post(self, request):
         token = RefreshToken(request.data['refresh'])
         token.blacklist()
         return Response({"message": "Logged out"}, status=status.HTTP_200_OK)

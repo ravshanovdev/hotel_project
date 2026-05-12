@@ -27,9 +27,6 @@ class OTPVerifySerializer(serializers.Serializer):
         if not result['success']:
             raise serializers.ValidationError(f"OTP verification failed: {result['error']}")
 
-        # bu kerakmi ozi ?
-        if user.is_active:
-            raise serializers.ValidationError("User already verified")
 
         attrs['user'] = user
         return attrs

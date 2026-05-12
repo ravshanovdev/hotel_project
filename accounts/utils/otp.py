@@ -1,4 +1,3 @@
-import random
 from django.core.cache import cache
 import secrets
 
