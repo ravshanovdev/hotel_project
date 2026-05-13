@@ -9,17 +9,17 @@ from accounts.views.profile_views import (GetMyProfileAPIView, UpdateMyProfileAP
 
 urlpatterns = [
     # register, login and logout
-    path('auth/', RegisterUserAPIView.as_view(), name='register'),
-    path('auth/business/', RegisterBusinessAPIView.as_view(), name='register-business'),
-    path('auth/login/', LoginAPIView.as_view(), name='login'),
-    path('auth/logout/', LogoutAPIView.as_view(), name='logout'),
+    path('auth/', RegisterUserAPIView.as_view(), name='register'), # tested
+    path('auth/business/', RegisterBusinessAPIView.as_view(), name='register-business'), # tested
+    path('auth/login/', LoginAPIView.as_view(), name='login'), # tested
+    path('auth/logout/', LogoutAPIView.as_view(), name='logout'), # tested
 
     # OTP
-    path('auth/verify-otp/', VerifyOtpAPIView.as_view(), name='verify-otp'),
-    path('auth/resent-otp/', ResendOtpAPIView.as_view(), name='resent-otp'),
+    path('auth/verify-otp/', VerifyOtpAPIView.as_view(), name='verify-otp'), # tested
+    path('auth/resent-otp/', ResendOtpAPIView.as_view(), name='resent-otp'), # tested
 
     # password management
-    path('auth/change-password/', ChangePasswordAPIView.as_view(), name='change-password'),
+    path('auth/change-password/', ChangePasswordAPIView.as_view(), name='change-password'), # tested
     path('auth/forgot-password/', ForgotPasswordAPIView.as_view(), name='forgot-password'),
     path('auth/reset-password/', ResetPasswordAPIView.as_view(), name='reset-password'),
 

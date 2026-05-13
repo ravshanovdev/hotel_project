@@ -1,11 +1,16 @@
 import pytest
 from .factory import CustomUserFactory, UserSessionFactory
+from accounts.models import CustomUser
 
 
 @pytest.fixture
 def user(db):
     return CustomUserFactory()
 
+
+@pytest.fixture
+def businessman(db):
+    return CustomUserFactory(user_type=CustomUser.UserType.BUSINESS)
 
 @pytest.fixture
 def admin_user(db):

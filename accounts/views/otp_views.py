@@ -9,6 +9,7 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from accounts.models import UserSession
 
 
+
 class VerifyOtpAPIView(APIView):
     permission_classes = [AllowAny]
 

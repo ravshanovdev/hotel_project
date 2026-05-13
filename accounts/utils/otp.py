@@ -8,7 +8,7 @@ ATTEMPT_LIMIT = 3
 
 
 def generate_otp():
-    return str(secrets.randbelow(999999) + 100000)
+    return str(secrets.randbelow(900000) + 100000)
 
 
 def send_otp(phone: str):
