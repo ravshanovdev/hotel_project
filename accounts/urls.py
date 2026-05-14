@@ -20,15 +20,17 @@ urlpatterns = [
 
     # password management
     path('auth/change-password/', ChangePasswordAPIView.as_view(), name='change-password'), # tested
-    path('auth/forgot-password/', ForgotPasswordAPIView.as_view(), name='forgot-password'),
-    path('auth/reset-password/', ResetPasswordAPIView.as_view(), name='reset-password'),
+    path('auth/forgot-password/', ForgotPasswordAPIView.as_view(), name='forgot-password'), # tested
+    path('auth/reset-password/', ResetPasswordAPIView.as_view(), name='reset-password'), # tested
 
     # profile
-    path("auth/profile/", GetMyProfileAPIView.as_view(), name='my-profile'),
-    path("auth/update-profile/", UpdateMyProfileAPIView.as_view(), name='update-profile'),
-    path("auth/delete-profile/", DeleteMyProfileAPIView.as_view(), name='delete-profile'),
-    path('auth/list-my-session/', ListMySessionAPIView.as_view(), name='list-my-sessions'),
-    path('auth/end-my-session/<str:jti>/', EndMySessionAPIView.as_view(), name='end-my-sessions'),
+    path("auth/profile/", GetMyProfileAPIView.as_view(), name='my-profile'), # tested
+    path("auth/update-profile/", UpdateMyProfileAPIView.as_view(), name='update-profile'), # tested
+    path("auth/delete-profile/", DeleteMyProfileAPIView.as_view(), name='delete-profile'), # tested
+
+    # sessions
+    path('auth/list-my-session/', ListMySessionAPIView.as_view(), name='list-my-sessions'), # tested
+    path('auth/end-my-session/<str:jti>/', EndMySessionAPIView.as_view(), name='end-my-session'), # tested
 
     # debugging
     path('list-all-users/', ListAllUsers.as_view(), ),

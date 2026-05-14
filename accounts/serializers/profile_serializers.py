@@ -6,9 +6,9 @@ class ProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = CustomUser
         fields = ['id', 'user_type', 'staff_role', 'phone', 'status', 'first_name', 'last_name', 'city',
-                  'district', 'email', 'birth_date', 'language', 'image', 'company', 'inn', 'stir', 'legal_address']
+                  'district', 'email', 'birth_date', 'language', 'image', 'company', 'inn', 'stir', 'legal_address', 'is_active']
 
-        read_only_fields = ['id', 'user_type', 'staff_role', 'phone', 'status']
+        read_only_fields = ['id', 'user_type', 'staff_role', 'phone', 'status', 'is_active']
 
 
 
