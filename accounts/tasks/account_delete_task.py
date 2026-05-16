@@ -16,6 +16,8 @@ def delete_account(phone):
 
     if timezone.now().date() >= user.deletion_requested_at.date() + timedelta(days=29):
         logger.info({phone: "successfully deleted"})
+
+        # hozircha hard delete
         user.delete()
 
     return
