@@ -40,7 +40,7 @@ class VerifyOtpAPIView(APIView):
 
         token = RefreshToken.for_user(user)
 
-        user_sessions = UserSession.objects.filter(user=user).count()
+        user_sessions = UserSession.objects.filter(user=user).select_for_update().count()
 
         if user_sessions >= 5:
             return Response({"error": "Maximum 5 active sessions allowed"}, status=status.HTTP_400_BAD_REQUEST)
