@@ -8,6 +8,7 @@ from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.throttling import AnonRateThrottle
 from accounts.models import UserSession
+from django.db import transaction
 
 
 class LoginThrottle(AnonRateThrottle):
@@ -34,6 +35,7 @@ class LoginAPIView(APIView):
             400: "Bad Request"
         }
     )
+    @transaction.atomic
     def post(self, request):
         serializer = LoginSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)

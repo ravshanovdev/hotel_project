@@ -18,17 +18,20 @@ def test_get_my_sessions(user):
         "password": "1234"
     }
 
-    response = client.post(URL1, data, format='json')
+    response1 = client.post(URL1, data, format='json')
 
-    assert response.status_code == 200
+    print(response1.data)
+
+    assert response1.status_code == 200
 
     URL = reverse('list-my-sessions')
 
-    response = client.get(URL, format='json')
+    response2 = client.get(URL, format='json')
+    print(response2.data)
 
-    assert response.status_code == 200
-    assert len(response.data) == 1
-    assert response.data[0]['user'] == user.id
+    assert response2.status_code == 200
+    assert len(response2.data) == 1
+    assert response2.data[0]['user'] == user.id
 
 
 @pytest.mark.django_db
@@ -48,6 +51,7 @@ def test_end_my_session(user):
     }
 
     response1 = client.post(URL1, data, format='json')
+    print(response1.data)
 
     assert response1.status_code == 200
 
@@ -58,6 +62,7 @@ def test_end_my_session(user):
     URL2 = reverse('list-my-sessions')
 
     response2 = client.get(URL2, format='json')
+    print(response2.data)
 
     assert response2.status_code == 200
     assert len(response2.data) == 1
@@ -68,6 +73,7 @@ def test_end_my_session(user):
     URL3 = reverse('end-my-session', kwargs={"jti": response2.data[0]['jti']})
 
     response3 = client.delete(URL3, format='json')
+    print(response3.data)
 
     assert response3.status_code == 200
 

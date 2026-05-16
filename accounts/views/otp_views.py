@@ -7,7 +7,7 @@ from accounts.serializers.otp_serializers import OTPVerifySerializer, ResendOTPS
 from rest_framework.permissions import AllowAny
 from rest_framework_simplejwt.tokens import RefreshToken
 from accounts.models import UserSession
-
+from django.db import transaction
 
 
 class VerifyOtpAPIView(APIView):
@@ -28,6 +28,7 @@ class VerifyOtpAPIView(APIView):
             400: "Bad Request"
         }
     )
+    @transaction.atomic
     def post(self, request):
         serializer = OTPVerifySerializer(data=request.data)
         serializer.is_valid(raise_exception=True)

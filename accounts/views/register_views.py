@@ -6,6 +6,7 @@ from accounts.serializers.register_serializers import RegisterUserSerializer, Re
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from accounts.utils.otp import send_otp
 from rest_framework_simplejwt.tokens import RefreshToken
+from accounts.models import UserSession
 
 
 class RegisterUserAPIView(APIView):
@@ -74,10 +75,16 @@ class LogoutAPIView(APIView):
         }
     )
     def post(self, request):
-        token = RefreshToken(request.data['refresh'])
-
+        token = RefreshToken(request.data.get('refresh'))
         if not token:
             return Response({"error": "Refresh token required"}, status=status.HTTP_400_BAD_REQUEST)
+
+
+        user_session = UserSession.objects.filter(jti=token['jti'], user=request.user).first()
+        if not user_session:
+            return Response({"error": "Invalid token"}, status=status.HTTP_400_BAD_REQUEST)
+
+        user_session.delete()
 
         token.blacklist()
         return Response({"message": "Logged out"}, status=status.HTTP_200_OK)

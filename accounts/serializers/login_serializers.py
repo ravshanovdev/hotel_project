@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from accounts.models import CustomUser
-from django.core.validators import RegexValidator
+from accounts.validators.validator import phone_validator
 from django.core.cache import cache
 
 
@@ -19,11 +19,6 @@ def get_request_count(phone):
 
     return {"success": True}
 
-
-phone_validator = RegexValidator(
-    regex=r'^\+998\d{9}$',
-    message="Format: +998XXXXXXXXX"
-)
 
 
 class LoginSerializer(serializers.Serializer):

@@ -91,6 +91,8 @@ def test_login(user):
 
     response = client.post(URL, data, format='json')
 
+    print(response.data)
+
     assert response.status_code == 200
     assert 'access' in response.data
     assert 'refresh' in response.data
@@ -102,8 +104,32 @@ def test_logout(user):
     client = APIClient()
     client.force_authenticate(user)
 
-    refresh = RefreshToken.for_user(user)
+    user.set_password("1234")
+    user.is_active = True
+    user.save()
 
+    # login
+    login_url = reverse('login')
+
+    login_data = {
+        "phone": user.phone,
+        "password": "1234",
+        "device_id": "1"
+    }
+
+    login_response = client.post(login_url, login_data, format='json')
+
+    refresh = login_response.data['refresh']
+    access = login_response.data['access']
+
+    # authenticate
+    client.credentials(
+        HTTP_AUTHORIZATION=f'Bearer {access}'
+    )
+
+    assert login_response.status_code == 200
+
+    # logout
     URL = reverse('logout')
 
     data = {
@@ -111,6 +137,8 @@ def test_logout(user):
     }
 
     response = client.post(URL, data, format='json')
+
+    print(response.data)
 
     assert response.status_code == 200
     assert response.data['message'] == "Logged out"

@@ -8,7 +8,7 @@ class CustomUserFactory(DjangoModelFactory):
     class Meta:
         model = CustomUser
 
-    phone = factory.Sequence(lambda x: f"+99888927282{x}")
+    phone = factory.Sequence(lambda x: f"+998901234{str(x).zfill(3)}")
     first_name = faker.Faker().first_name()
     last_name = faker.Faker().last_name()
     user_type = CustomUser.UserType.USER

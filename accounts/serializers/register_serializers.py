@@ -1,12 +1,8 @@
 from rest_framework import serializers
 from django.contrib.auth.password_validation import validate_password
 from accounts.models import CustomUser
-from django.core.validators import RegexValidator
+from accounts.validators.validator import phone_validator
 
-phone_validator = RegexValidator(
-    regex=r'^\+998\d{9}$',
-    message="Format: +998XXXXXXXXX"
-)
 
 class RegisterUserSerializer(serializers.ModelSerializer):
     phone = serializers.CharField(required=True, validators=[phone_validator])

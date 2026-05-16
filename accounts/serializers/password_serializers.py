@@ -1,15 +1,9 @@
 from rest_framework import serializers
 from django.contrib.auth.password_validation import validate_password
 from accounts.utils.otp import send_otp, verify_otp
-from django.core.validators import RegexValidator
 from accounts.models import CustomUser
+from accounts.validators.validator import phone_validator
 
-
-
-phone_validator = RegexValidator(
-    regex=r'^\+998\d{9}$',
-    message="Format: +998XXXXXXXXX"
-)
 
 
 class ChangePasswordSerializer(serializers.Serializer):
@@ -47,7 +41,10 @@ class ForgotPasswordSerializer(serializers.Serializer):
         if not user:
             raise serializers.ValidationError({"phone": "User with this phone number does not exist."})
 
-        send_otp(phone=attrs.get('phone'))
+        result = send_otp(phone=attrs.get('phone'))
+
+        if not result['success']:
+            raise serializers.ValidationError({"error": f"OTP could not be sent: {result['error']}"})
 
         return attrs
 
