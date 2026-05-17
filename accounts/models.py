@@ -149,6 +149,11 @@ class UserSession(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
+    class Meta:
+        unique_together = ('user', 'device_id')
+        verbose_name = _('UserSession')
+        verbose_name_plural = _('UserSessions')
+
     def __str__(self):
         return self.user.phone + " - " + self.device_id
 

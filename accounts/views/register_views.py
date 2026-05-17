@@ -2,6 +2,8 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from drf_yasg.utils import swagger_auto_schema
+from rest_framework_simplejwt.exceptions import TokenError
+
 from accounts.serializers.register_serializers import RegisterUserSerializer, RegisterBusinessSerializer
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from accounts.utils.otp import send_otp
@@ -75,9 +77,18 @@ class LogoutAPIView(APIView):
         }
     )
     def post(self, request):
-        token = RefreshToken(request.data.get('refresh'))
-        if not token:
+
+
+        refresh = request.data.get('refresh')
+
+        if not refresh:
             return Response({"error": "Refresh token required"}, status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            token = RefreshToken(refresh)
+        except TokenError:
+            return Response({"error": "Invalid or expired token"}, status=status.HTTP_400_BAD_REQUEST)
+
 
 
         user_session = UserSession.objects.filter(jti=token['jti'], user=request.user).first()

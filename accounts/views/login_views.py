@@ -7,7 +7,7 @@ from accounts.serializers.login_serializers import LoginSerializer
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.throttling import AnonRateThrottle
-from accounts.models import UserSession
+from accounts.models import UserSession, CustomUser
 from django.db import transaction
 
 
@@ -44,7 +44,9 @@ class LoginAPIView(APIView):
 
         token = RefreshToken.for_user(user)
 
-        user_sessions = UserSession.objects.filter(user=user).select_for_update().count()
+        user = CustomUser.objects.select_for_update().get(id=user.id)
+
+        user_sessions = UserSession.objects.filter(user=user).count()
 
         if user_sessions >= 5:
             return Response({"error": "Maximum 5 active sessions allowed"}, status=status.HTTP_400_BAD_REQUEST)
