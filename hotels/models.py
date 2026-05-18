@@ -17,7 +17,7 @@ class Hotel(models.Model):
         RESORT = 'resort', 'Resort'
         GUEST_HOUSE = 'guest house', 'Guest House'
 
-    owner = models.ForeignKey('CustomUser', on_delete=models.CASCADE, related_name='hotels')
+    owner = models.ForeignKey('accounts.CustomUser', on_delete=models.CASCADE, related_name='hotels')
     name = models.CharField(max_length=150)
     type = models.CharField(max_length=150, choices=TypeChoices.choices, default=TypeChoices.HOTEL)
     status = models.CharField(max_length=50, choices=StatusChoices.choices, default=StatusChoices.IN_MODERATION)

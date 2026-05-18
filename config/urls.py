@@ -24,6 +24,7 @@ urlpatterns = [
 
     # accounts
     path('api/v1/', include('accounts.urls')),
+    path('api/v1/hotels/', include('hotels.urls')),
 
     # swagger
     re_path(r'^swagger(?P<format>\.json|\.yaml)$', schema_view.without_ui(cache_timeout=0), name='schema-json'),

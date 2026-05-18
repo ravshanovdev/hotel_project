@@ -6,7 +6,8 @@ from rest_framework import status
 from rest_framework.permissions import AllowAny
 from accounts.permisions.business import IsBusiness, IsAdminOrBusiness
 from drf_yasg.utils import swagger_auto_schema
-
+from hotels.utils import filter_by_radius
+from hotels.filters import HotelFilter
 
 
 class AddHotelAPIView(APIView):
@@ -34,13 +35,32 @@ class GetAllHotelsAPIView(APIView):
     @swagger_auto_schema(
         tags=['hotels'],
         responses={
-            200: HotelSerializer,
+            200: HotelSerializer(many=True),
             404: "Not Found"
         }
     )
     def get(self, request):
-        pass
+        queryset = Hotel.objects.all()
 
+        # django-filter
+        hotel_filter = HotelFilter(
+            request.GET,
+            queryset=queryset
+        )
+
+        queryset = hotel_filter.qs
+
+        # radius filter
+        lang = request.query_params.get('lang')
+        lat  = request.query_params.get('lat')
+        radius = request.query_params.get('radius')
+
+        if lat and lang and radius:
+            queryset = filter_by_radius(queryset=queryset, lat=float(lat), lang=float(lang), radius=float(radius))
+
+        serializer = HotelSerializer(queryset, many=True)
+
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
 
 class GetHotelAPIView(APIView):
@@ -116,7 +136,7 @@ class GetAllMyHotelsAPIView(APIView):
     @swagger_auto_schema(
         tags=['hotels'],
         responses={
-            200: HotelSerializer,
+            200: HotelSerializer(many=True),
             404: "Not found"
         }
     )
