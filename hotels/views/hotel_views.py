@@ -40,7 +40,7 @@ class GetAllHotelsAPIView(APIView):
         }
     )
     def get(self, request):
-        queryset = Hotel.objects.all()
+        queryset = Hotel.objects.filter(status='active')
 
         # django-filter
         hotel_filter = HotelFilter(
@@ -121,7 +121,11 @@ class DeleteHotelAPIView(APIView):
     )
     def delete(self, request, pk):
         try:
-            hotel = Hotel.objects.get(owner=request.user, pk=pk)
+            if request.user.is_staff:
+                hotel = Hotel.objects.get(pk=pk)
+            else:
+                hotel = Hotel.objects.get(owner=request.user, pk=pk)
+
         except Hotel.DoesNotExist:
             return Response({"error": "hotel not found"}, status=status.HTTP_404_NOT_FOUND)
 
