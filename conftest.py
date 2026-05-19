@@ -1,6 +1,8 @@
 import pytest
-from .factory import CustomUserFactory, UserSessionFactory
+from accounts.tests.factory import CustomUserFactory, UserSessionFactory
 from accounts.models import CustomUser
+from hotels.tests.factorys import HotelFactory
+from hotels.models import Hotel
 
 
 @pytest.fixture
@@ -30,6 +32,24 @@ def three_user_sessions(db, user):
 @pytest.fixture
 def five_user_sessions(db, user):
     return UserSessionFactory.create_batch(5)
+
+
+# Hotel
+
+@pytest.fixture
+def hotel(db, businessman):
+    return HotelFactory(owner=businessman)
+
+
+@pytest.fixture
+def multiple_hotels_one_owner(db, businessman):
+    return HotelFactory.create_batch(5, status=Hotel.StatusChoices.ACTIVE,
+                                     owner=businessman)
+
+@pytest.fixture
+def multiple_hotels(db):
+    return HotelFactory.create_batch(5, status=Hotel.StatusChoices.ACTIVE)
+
 
 
 

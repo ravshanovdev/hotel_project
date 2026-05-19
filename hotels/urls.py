@@ -5,12 +5,12 @@ from hotels.views.hotel_views import (GetAllHotelsAPIView, AddHotelAPIView, GetA
 
 
 urlpatterns = [
-    path('list/', GetAllHotelsAPIView.as_view(), name='all-hotels'),
-    path('detail/<int:pk>/', GetHotelAPIView.as_view(), name='detail-hotels'),
-    path('add-hotels/', AddHotelAPIView.as_view(), name='add-hotels'),
-    path('get-my-hotels/', GetAllMyHotelsAPIView.as_view(), name='all-my-hotels'),
-    path('delete-hotels/<int:pk>/', DeleteHotelAPIView.as_view(), name='delete-hotel'),
-    path('update-hotel/<int:pk>/', UpdateHotelAPIView.as_view(), name='update-hotels'),
+    path('list/', GetAllHotelsAPIView.as_view(), name='all-hotels'),                    # tested
+    path('detail/<int:pk>/', GetHotelAPIView.as_view(), name='detail-hotel'),           # tested
+    path('add-hotel/', AddHotelAPIView.as_view(), name='add-hotel'),                    # tested
+    path('get-my-hotels/', GetAllMyHotelsAPIView.as_view(), name='all-my-hotels'),      # tested
+    path('delete-hotel/<int:pk>/', DeleteHotelAPIView.as_view(), name='delete-hotel'),  # tested
+    path('update-hotel/<int:pk>/', UpdateHotelAPIView.as_view(), name='update-hotel'),  # tested
 
 ]
 

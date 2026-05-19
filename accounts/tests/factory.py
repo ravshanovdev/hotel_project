@@ -13,8 +13,8 @@ class CustomUserFactory(DjangoModelFactory):
     last_name = faker.Faker().last_name()
     user_type = CustomUser.UserType.USER
     status = CustomUser.Status.PENDING
-    inn = faker.Faker().bothify(text='##########')
-    stir = faker.Faker().bothify(text='##########')
+    inn = factory.Faker('ean', length=13)
+    stir = factory.Faker('ean', length=13)
     legal_address = faker.Faker().address()
     is_active = False
     is_staff = False
