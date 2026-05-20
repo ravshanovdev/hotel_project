@@ -31,3 +31,50 @@ class Hotel(models.Model):
     def __str__(self):
         return self.name
 
+
+class HotelImage(models.Model):
+    hotel = models.ForeignKey(Hotel, on_delete=models.CASCADE, related_name='images')
+    image = models.ImageField(upload_to='images/')
+    order = models.IntegerField(default=0)
+
+    def __str__(self):
+        return self.hotel.name
+
+
+class HotelAmenity(models.Model):
+    hotel = models.ForeignKey(Hotel, on_delete=models.CASCADE, related_name='amenities')
+    amenity_name = models.CharField(max_length=150)
+    icon = models.URLField()
+
+    def __str__(self):
+        return self.amenity_name
+
+
+class HotelFAQ(models.Model):
+    class SectionChoices(models.TextChoices):
+        BREAKFAST = 'breakfast', 'Breakfast'
+        TRANSFER = 'transfer', 'Transfer'
+        LOCATION = 'location', 'Location'
+        PAYMENT = 'payment', 'Payment'
+
+    hotel = models.ForeignKey(Hotel, on_delete=models.CASCADE, related_name='faqs')
+    question = models.TextField()
+    answer = models.TextField()
+    section = models.CharField(max_length=50, choices=SectionChoices.choices)
+    lang = models.CharField(max_length=5, choices=[('uz','UZ'),('ru','RU'),('en','EN')],
+                                    default='uz')
+
+    def __str__(self):
+        return self.question
+
+
+class HotelSpecialOffer(models.Model):
+    hotel = models.ForeignKey(Hotel, on_delete=models.CASCADE, related_name='special_offers')
+    title = models.CharField(max_length=150)
+    price = models.DecimalField(max_digits=10, decimal_places=2)
+    start_time_at = models.DateField()
+    end_time_at = models.DateField()
+
+    def __str__(self):
+        return self.title
+
