@@ -3,6 +3,14 @@ from accounts.tests.factory import CustomUserFactory, UserSessionFactory
 from accounts.models import CustomUser
 from hotels.tests.factorys import HotelFactory, HotelImageFactory, HotelAmenityFactory
 from hotels.models import Hotel
+import tempfile
+
+
+@pytest.fixture(autouse=True)
+def temp_media_root(settings):
+    with tempfile.TemporaryDirectory() as temp_dir:
+        settings.MEDIA_ROOT = temp_dir
+        yield
 
 
 # accounts(CustomUser)
