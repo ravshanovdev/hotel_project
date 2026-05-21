@@ -1,9 +1,11 @@
 import pytest
 from accounts.tests.factory import CustomUserFactory, UserSessionFactory
 from accounts.models import CustomUser
-from hotels.tests.factorys import HotelFactory
+from hotels.tests.factorys import HotelFactory, HotelImageFactory, HotelAmenityFactory
 from hotels.models import Hotel
 
+
+# accounts(CustomUser)
 
 @pytest.fixture
 def user(db):
@@ -34,7 +36,7 @@ def five_user_sessions(db, user):
     return UserSessionFactory.create_batch(5)
 
 
-# Hotel
+# hotels(Hotel)
 
 @pytest.fixture
 def hotel(db, businessman):
@@ -51,8 +53,28 @@ def multiple_hotels(db):
     return HotelFactory.create_batch(5, status=Hotel.StatusChoices.ACTIVE)
 
 
+# hotels(HotelImage)
+
+@pytest.fixture
+def hotel_image(db, hotel):
+    return HotelImageFactory(hotel=hotel)
+
+
+@pytest.fixture
+def multiple_hotel_image(db):
+    return HotelImageFactory.create_batch(5)
 
 
 
+# hotels(HotelAmenity)
+
+@pytest.fixture
+def hotel_amenity(db, hotel):
+    return HotelAmenityFactory(hotel=hotel)
+
+
+@pytest.fixture
+def multiple_hotel_amenity(db, hotel):
+    return HotelAmenityFactory.create_batch(5, hotel=hotel)
 
 

@@ -1,6 +1,6 @@
 from factory.django import DjangoModelFactory
 import factory
-from hotels.models import Hotel
+from hotels.models import Hotel, HotelImage, HotelAmenity
 from accounts.tests.factory import CustomUserFactory
 from accounts.models import CustomUser
 
@@ -21,5 +21,19 @@ class HotelFactory(DjangoModelFactory):
     longitude = factory.Faker('longitude')
 
 
+class HotelImageFactory(DjangoModelFactory):
+    class Meta:
+        model = HotelImage
+
+    hotel = factory.SubFactory(HotelFactory)
+    image = factory.django.ImageField(color='blue')
+    order = factory.Sequence(lambda x: x)
 
 
+class HotelAmenityFactory(DjangoModelFactory):
+    class Meta:
+        model = HotelAmenity
+
+    hotel = factory.SubFactory(HotelFactory)
+    amenity_name = factory.Sequence(lambda x: f"Amenity {x}")
+    icon = factory.Faker('image_url')

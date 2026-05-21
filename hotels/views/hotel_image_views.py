@@ -1,5 +1,6 @@
 from rest_framework.generics import CreateAPIView, DestroyAPIView, UpdateAPIView
 from rest_framework.exceptions import PermissionDenied
+from rest_framework.parsers import FormParser, MultiPartParser
 from hotels.serializers.hotel_image_serializers import HotelImageSerializer
 from accounts.permisions.business import IsBusiness
 from hotels.models import HotelImage
@@ -10,6 +11,7 @@ class HotelImageCreateAPIView(CreateAPIView):
     serializer_class = HotelImageSerializer
     permission_classes = [IsBusiness]
     queryset = HotelImage.objects.all()
+    parser_classes = [FormParser, MultiPartParser]
 
     @swagger_auto_schema(
         tags=['hotel_image'],
@@ -39,7 +41,7 @@ class HotelImageDeleteAPIView(DestroyAPIView):
     @swagger_auto_schema(
         tags=['hotel_image'],
         responses={
-            200: "Hotel object deleted successfully",
+            204: "No content",
             404: "Not found",
             403: "Permission denied"
         }
@@ -57,6 +59,7 @@ class HotelImageDeleteAPIView(DestroyAPIView):
 class HotelImageUpdateAPIView(UpdateAPIView):
     serializer_class = HotelImageSerializer
     permission_classes = [IsBusiness]
+    parser_classes = [FormParser, MultiPartParser]
 
     @swagger_auto_schema(
         tags=['hotel_image'],
