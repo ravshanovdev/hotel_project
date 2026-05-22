@@ -1,6 +1,6 @@
 from factory.django import DjangoModelFactory
 import factory
-from hotels.models import Hotel, HotelImage, HotelAmenity
+from hotels.models import Hotel, HotelImage, HotelAmenity, HotelFAQ
 from accounts.tests.factory import CustomUserFactory
 from accounts.models import CustomUser
 
@@ -37,3 +37,13 @@ class HotelAmenityFactory(DjangoModelFactory):
     hotel = factory.SubFactory(HotelFactory)
     amenity_name = factory.Sequence(lambda x: f"Amenity {x}")
     icon = factory.Faker('image_url')
+
+
+class HotelFAQFactory(DjangoModelFactory):
+    class Meta:
+        model = HotelFAQ
+
+    hotel = factory.SubFactory(HotelFactory)
+    section = factory.Faker('random_element', elements=[choice[0] for choice in HotelFAQ.SectionChoices.choices])
+    question = factory.Sequence(lambda x: f"Question {x}?")
+    answer = factory.Faker('paragraph')

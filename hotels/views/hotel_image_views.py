@@ -50,8 +50,13 @@ class HotelImageDeleteAPIView(DestroyAPIView):
         return super().destroy(request, *args, **kwargs)
 
     def get_queryset(self):
+        user = self.request.user
+
+        if not user.is_authenticated:
+            return HotelImage.objects.none()
+
         return HotelImage.objects.filter(
-            hotel__owner=self.request.user
+            hotel__owner=user
         )
 
 
@@ -73,8 +78,13 @@ class HotelImageUpdateAPIView(UpdateAPIView):
         return super().patch(request, *args, **kwargs)
 
     def get_queryset(self):
+        user = self.request.user
+
+        if not user.is_authenticated:
+            return HotelImage.objects.none()
+
         return HotelImage.objects.filter(
-            hotel__owner=self.request.user
+            hotel__owner=user
         )
 
 

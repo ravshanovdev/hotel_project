@@ -43,8 +43,13 @@ class HotelAmenityDeleteAPIView(DestroyAPIView):
         return self.destroy(request, *args, **kwargs)
 
     def get_queryset(self):
+        user = self.request.user
+
+        if not user.is_authenticated:
+            return HotelAmenity.objects.none()
+
         return HotelAmenity.objects.filter(
-            hotel__owner=self.request.user
+            hotel__owner=user
         )
 
 
