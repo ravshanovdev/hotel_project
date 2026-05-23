@@ -1,7 +1,8 @@
 import pytest
 from accounts.tests.factory import CustomUserFactory, UserSessionFactory
 from accounts.models import CustomUser
-from hotels.tests.factorys import HotelFactory, HotelImageFactory, HotelAmenityFactory, HotelFAQFactory
+from hotels.tests.factorys import (HotelFactory, HotelImageFactory, HotelAmenityFactory, HotelFAQFactory,
+                                   HotelSpecialOfferFactory)
 from hotels.models import Hotel
 import tempfile
 
@@ -98,6 +99,16 @@ def multiple_hotel_faq(db, hotel):
     return HotelFAQFactory.create_batch(5, hotel=hotel)
 
 
+# hotels(HotelSpecialOffer)
+
+@pytest.fixture
+def hotel_sof(db, hotel):
+    return HotelSpecialOfferFactory(hotel=hotel)
+
+
+@pytest.fixture
+def multiple_hotel_sof(db, hotel):
+    return HotelSpecialOfferFactory.create_batch(5, hotel=hotel)
 
 
 

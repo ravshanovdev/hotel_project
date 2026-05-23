@@ -46,7 +46,7 @@ class HotelFAQListAPIView(ListAPIView):
         return super().get(request, *args, **kwargs)
 
     def get_queryset(self):
-        hotel_id = self.kwargs['hotel_id']
+        hotel_id = self.kwargs.get('hotel_id')
         return HotelFAQ.objects.filter(hotel__id=hotel_id)
 
 

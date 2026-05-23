@@ -13,7 +13,7 @@ class HotelFilter(django_filters.FilterSet):
     # max_price = django_filters.NumberFilter(field_name='')
 
     # bu uchun alohida HotelAmenities degan model qoshishim kerak
-    # amenities = django_filters.CharFilter(field_name='')
+    amenities = django_filters.BaseInFilter(field_name='hotelamenity__name', lookup_expr='in')
 
     class Meta:
         model = Hotel
@@ -21,6 +21,7 @@ class HotelFilter(django_filters.FilterSet):
             'address',
             'stars',
             'type',
+            'amenities',
         ]
 
 

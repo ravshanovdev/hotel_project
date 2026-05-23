@@ -1,6 +1,6 @@
 from factory.django import DjangoModelFactory
 import factory
-from hotels.models import Hotel, HotelImage, HotelAmenity, HotelFAQ
+from hotels.models import Hotel, HotelImage, HotelAmenity, HotelFAQ, HotelSpecialOffer
 from accounts.tests.factory import CustomUserFactory
 from accounts.models import CustomUser
 
@@ -47,3 +47,14 @@ class HotelFAQFactory(DjangoModelFactory):
     section = factory.Faker('random_element', elements=[choice[0] for choice in HotelFAQ.SectionChoices.choices])
     question = factory.Sequence(lambda x: f"Question {x}?")
     answer = factory.Faker('paragraph')
+
+
+class HotelSpecialOfferFactory(DjangoModelFactory):
+    class Meta:
+        model = HotelSpecialOffer
+
+    hotel = factory.SubFactory(HotelFactory)
+    title = factory.Sequence(lambda x: f"Special Offer {x}")
+    price = factory.Faker('random_number', digits=5)
+    start_time_at = factory.Faker('date_this_year')
+    end_time_at = factory.Faker('date_this_year')

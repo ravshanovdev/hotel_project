@@ -4,7 +4,8 @@ from hotels.views.hotel_views import (GetAllHotelsAPIView, AddHotelAPIView, GetA
 from hotels.views.hotel_image_views import HotelImageCreateAPIView, HotelImageDeleteAPIView, HotelImageUpdateAPIView
 from hotels.views.hotel_amenity_views import HotelAmenityCreateAPIView, HotelAmenityDeleteAPIView
 from hotels.views.hotel_faq_views import HotelFAQCreateAPIView, HotelFAQListAPIView, HotelFAQUpdateAPIView, HotelFAQDeleteAPIView
-
+from hotels.views.hotel_special_offer_views import (HotelSpecialOfferListAPIView, HotelSpecialOfferCreateAPIView,
+                                                    HotelSpecialOfferUpdateAPIView, HotelSpecialOfferDeleteAPIView)
 
 
 urlpatterns = [
@@ -31,6 +32,14 @@ urlpatterns = [
     path('faqs/create/', HotelFAQCreateAPIView.as_view(), name='hotel-faq-create'),          # tested
     path('faqs/<int:pk>/update/', HotelFAQUpdateAPIView.as_view(), name='hotel-faq-update'), # tested
     path('faqs/<int:pk>/delete/', HotelFAQDeleteAPIView.as_view(), name='hotel-faq-delete'), # tested
+
+    # Hotel Special Offer
+    path('<int:hotel_id>/special-offers/', HotelSpecialOfferListAPIView.as_view(), name='hotel-special-offer-list'),      # tested
+    path('special-offers/create/', HotelSpecialOfferCreateAPIView.as_view(), name='hotel-special-offer-create'),          # tested
+    path('special-offers/<int:pk>/update/', HotelSpecialOfferUpdateAPIView.as_view(), name='hotel-special-offer-update'), # tested
+    path('special-offers/<int:pk>/delete/', HotelSpecialOfferDeleteAPIView.as_view(), name='hotel-special-offer-delete'), # tested
+
+
 
 ]
 
