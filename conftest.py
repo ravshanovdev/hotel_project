@@ -5,6 +5,9 @@ from hotels.tests.factorys import (HotelFactory, HotelImageFactory, HotelAmenity
                                    HotelSpecialOfferFactory)
 from hotels.models import Hotel
 import tempfile
+from rooms.tests.factorys import RoomFactory
+
+
 
 
 @pytest.fixture(autouse=True)
@@ -109,6 +112,18 @@ def hotel_sof(db, hotel):
 @pytest.fixture
 def multiple_hotel_sof(db, hotel):
     return HotelSpecialOfferFactory.create_batch(5, hotel=hotel)
+
+
+# rooms(Room)
+
+@pytest.fixture
+def room(db, hotel):
+    return RoomFactory(hotel=hotel)
+
+
+@pytest.fixture
+def multiple_rooms(db, hotel):
+    return RoomFactory.create_batch(5, hotel=hotel)
 
 
 

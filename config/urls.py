@@ -1,6 +1,4 @@
-
 from django.contrib import admin
-from django.urls import path
 from django.conf.urls.static import static
 from django.conf import settings
 from django.urls import path, include, re_path
@@ -24,7 +22,12 @@ urlpatterns = [
 
     # accounts
     path('api/v1/', include('accounts.urls')),
+
+    # hotels
     path('api/v1/hotels/', include('hotels.urls')),
+
+    # rooms
+    path('api/v1/rooms/', include('rooms.urls')),
 
     # swagger
     re_path(r'^swagger(?P<format>\.json|\.yaml)$', schema_view.without_ui(cache_timeout=0), name='schema-json'),
