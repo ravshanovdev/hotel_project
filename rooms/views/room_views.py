@@ -1,6 +1,6 @@
 from rest_framework.generics import CreateAPIView, ListAPIView, UpdateAPIView, DestroyAPIView
 from drf_yasg.utils import swagger_auto_schema
-from rooms.serializers.room_serializers import RoomSerializer
+from rooms.serializers.room_serializers import RoomSerializer, GetRoomSerializer
 from rooms.models import Room
 from accounts.permisions.business import IsBusiness
 from rest_framework.permissions import AllowAny
@@ -33,12 +33,12 @@ class RoomCreateAPIView(CreateAPIView):
 
 class RoomListAPIView(ListAPIView):
     permission_classes = [AllowAny]
-    serializer_class = RoomSerializer
+    serializer_class = GetRoomSerializer
 
     @swagger_auto_schema(
         tags = ['room'],
         responses={
-            200: RoomSerializer(many=True),
+            200: GetRoomSerializer(many=True),
             404: 'not found'
         }
     )

@@ -1,6 +1,6 @@
 import factory
 from factory.django import DjangoModelFactory
-from rooms.models import Room
+from rooms.models import Room, RoomImage
 from hotels.tests.factorys import HotelFactory
 
 
@@ -15,6 +15,14 @@ class RoomFactory(DjangoModelFactory):
     status = factory.Iterator(Room.StatusChoices.values)
     capacity = factory.Faker('random_int', min=1, max=10)
     type = factory.Iterator(Room.TypeChoices.values)
+
+
+class RoomImageFactory(DjangoModelFactory):
+    class Meta:
+        model = RoomImage
+
+    room = factory.SubFactory(RoomFactory, status='active')
+    image = factory.django.ImageField(color='black')
 
 
 
