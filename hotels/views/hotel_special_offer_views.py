@@ -4,6 +4,8 @@ from drf_yasg.utils import swagger_auto_schema
 from accounts.permisions.business import IsBusiness
 from rest_framework.permissions import AllowAny
 from hotels.models import HotelSpecialOffer
+from rest_framework.exceptions import PermissionDenied
+
 
 
 class HotelSpecialOfferCreateAPIView(CreateAPIView):
@@ -21,6 +23,13 @@ class HotelSpecialOfferCreateAPIView(CreateAPIView):
     def post(self, request, *args, **kwargs):
         return super().post(request, *args, **kwargs)
 
+    def perform_create(self, serializer):
+        hotel = serializer.validated_data['hotel']
+
+        if hotel.owner != self.request.user:
+            raise PermissionDenied('Hotel not found.')
+
+        serializer.save()
 
 
 class HotelSpecialOfferListAPIView(ListAPIView):

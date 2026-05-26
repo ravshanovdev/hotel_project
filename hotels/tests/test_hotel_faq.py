@@ -35,8 +35,8 @@ def test_list_hotel_faq(hotel, multiple_hotel_faq):
     response = client.get(url, format='json')
 
     assert response.status_code == 200
-    assert len(response.data) == len(multiple_hotel_faq)
-    for faq in response.data:
+    assert len(response.data['results']) == len(multiple_hotel_faq)
+    for faq in response.data['results']:
         assert faq['hotel'] == hotel.id
 
 

@@ -123,7 +123,7 @@ def room(db, hotel):
 
 @pytest.fixture
 def multiple_rooms(db, hotel):
-    return RoomFactory.create_batch(5, hotel=hotel)
+    return RoomFactory.create_batch(5, hotel=hotel, status='active')
 
 
 

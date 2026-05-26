@@ -36,8 +36,10 @@ def test_list_special_offers(hotel, multiple_hotel_sof):
     response = client.get(url, format='json')
 
     assert response.status_code == 200
-    assert len(response.data) == len(multiple_hotel_sof)
-    for sof in response.data:
+    assert response.data['count'] == len(multiple_hotel_sof)
+    assert len(response.data['results']) == len(multiple_hotel_sof)
+
+    for sof in response.data['results']:
         assert sof['hotel'] == hotel.id
 
 

@@ -4,6 +4,7 @@ from rooms.serializers.room_serializers import RoomSerializer
 from rooms.models import Room
 from accounts.permisions.business import IsBusiness
 from rest_framework.permissions import AllowAny
+from rest_framework.exceptions import PermissionDenied
 
 
 
@@ -21,11 +22,18 @@ class RoomCreateAPIView(CreateAPIView):
     def post(self, request, *args, **kwargs):
         return super().post(request, *args, **kwargs)
 
+    def perform_create(self, serializer):
+        hotel = serializer.validated_data['hotel']
+
+        if hotel.owner != self.request.user:
+            raise PermissionDenied('Hotel not found.')
+
+        serializer.save()
 
 
 class RoomListAPIView(ListAPIView):
-    serializer_class = RoomSerializer
     permission_classes = [AllowAny]
+    serializer_class = RoomSerializer
 
     @swagger_auto_schema(
         tags = ['room'],
@@ -42,7 +50,7 @@ class RoomListAPIView(ListAPIView):
 
         return Room.objects.filter(
             hotel__id=hotel_id, status='active'
-        )
+        ).order_by('id')
 
 
 
