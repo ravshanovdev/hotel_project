@@ -1,6 +1,6 @@
 import factory
 from factory.django import DjangoModelFactory
-from rooms.models import Room, RoomImage
+from rooms.models import Room, RoomImage, RoomPrice
 from hotels.tests.factorys import HotelFactory
 
 
@@ -25,5 +25,17 @@ class RoomImageFactory(DjangoModelFactory):
     image = factory.django.ImageField(color='black')
 
 
+
+class RoomPriceFactory(DjangoModelFactory):
+    class Meta:
+        model = RoomPrice
+
+
+    room = factory.SubFactory(RoomFactory, status='active')
+    main_price = factory.Faker('pydecimal', left_digits=5, right_digits=2, positive=True)
+    week_daily_price = factory.Faker('pydecimal', left_digits=5, right_digits=2, positive=True)
+    vocation_price = factory.Faker('pydecimal', left_digits=5, right_digits=2, positive=True)
+    holiday_price = factory.Faker('pydecimal', left_digits=5, right_digits=2, positive=True)
+    min_nights = factory.Faker('random_int', min=1, max=10)
 
 

@@ -35,7 +35,7 @@ class RoomImage(models.Model):
 
 
 class RoomPrice(models.Model):
-    room = models.OneToOneField(Room, on_delete=models.CASCADE, related_name='prices')
+    room = models.ForeignKey(Room, on_delete=models.CASCADE, related_name='prices')
     main_price = models.DecimalField(max_digits=10, decimal_places=2)
     week_daily_price = models.DecimalField(max_digits=10, decimal_places=2)
     vocation_price = models.DecimalField(max_digits=10, decimal_places=2)

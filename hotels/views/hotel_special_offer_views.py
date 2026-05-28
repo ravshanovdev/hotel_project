@@ -27,7 +27,7 @@ class HotelSpecialOfferCreateAPIView(CreateAPIView):
         hotel = serializer.validated_data['hotel']
 
         if hotel.owner != self.request.user:
-            raise PermissionDenied('Hotel not found.')
+            raise PermissionDenied('you do not own this hotel.!')
 
         serializer.save()
 
@@ -43,8 +43,8 @@ class HotelSpecialOfferListAPIView(ListAPIView):
             404: 'not found'
         }
     )
-    def get(self, request, *args, **kwargs):
-        return super().get(request, *args, **kwargs)
+    def list(self, request, *args, **kwargs):
+        return super().list(request, *args, **kwargs)
 
     def get_queryset(self):
         hotel_id = self.kwargs.get('hotel_id')

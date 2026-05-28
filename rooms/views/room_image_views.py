@@ -28,7 +28,7 @@ class RoomImageCreateAPIView(CreateAPIView):
         room = serializer.validated_data.get('room')
 
         if room.hotel.owner != self.request.user:
-            raise PermissionDenied('room not found')
+            raise PermissionDenied('this room not belong to you.!')
 
         serializer.save()
 

@@ -1,16 +1,16 @@
 from rest_framework import serializers
-from rooms.models import RoomImage, Room
+from rooms.models import RoomPrice, Room
 
 
 
-class RoomImageSerializer(serializers.ModelSerializer):
+class RoomPriceSerializer(serializers.ModelSerializer):
     room = serializers.PrimaryKeyRelatedField(
         queryset=Room.objects.none()
     )
-    class Meta:
-        model = RoomImage
-        fields = ['id', 'room', 'image']
 
+    class Meta:
+        model = RoomPrice
+        fields = ['id', 'room', 'main_price', 'week_daily_price', 'vocation_price', 'holiday_price', 'min_nights']
 
 
     def __init__(self, *args, **kwargs):
@@ -22,3 +22,7 @@ class RoomImageSerializer(serializers.ModelSerializer):
             self.fields['room'].queryset = Room.objects.filter(
                 hotel__owner=request.user
             )
+
+
+
+
