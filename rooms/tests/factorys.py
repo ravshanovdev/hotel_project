@@ -1,6 +1,6 @@
 import factory
 from factory.django import DjangoModelFactory
-from rooms.models import Room, RoomImage, RoomPrice
+from rooms.models import Room, RoomImage, RoomPrice, RoomAvailability
 from hotels.tests.factorys import HotelFactory
 
 
@@ -38,4 +38,13 @@ class RoomPriceFactory(DjangoModelFactory):
     holiday_price = factory.Faker('pydecimal', left_digits=5, right_digits=2, positive=True)
     min_nights = factory.Faker('random_int', min=1, max=10)
 
+
+
+class RoomAvailabilityFactory(DjangoModelFactory):
+    class Meta:
+        model = RoomAvailability
+
+    room = factory.SubFactory(RoomFactory, status='active')
+    date = factory.Faker('date')
+    status = factory.Iterator(RoomAvailability.StatusChoices.EMPTY)
 

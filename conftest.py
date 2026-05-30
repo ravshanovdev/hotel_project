@@ -5,7 +5,7 @@ from hotels.tests.factorys import (HotelFactory, HotelImageFactory, HotelAmenity
                                    HotelSpecialOfferFactory)
 from hotels.models import Hotel
 import tempfile
-from rooms.tests.factorys import RoomFactory, RoomImageFactory, RoomPriceFactory
+from rooms.tests.factorys import RoomFactory, RoomImageFactory, RoomPriceFactory, RoomAvailabilityFactory
 
 
 
@@ -151,7 +151,16 @@ def multiple_room_prices(db, room):
     return RoomPriceFactory.create_batch(5, room=room)
 
 
+# room(RoomAvailability
 
+@pytest.fixture
+def room_avbty(db, room):
+    return RoomAvailabilityFactory(room=room)
+
+
+@pytest.fixture
+def multiple_room_avbty(db, room):
+    return RoomAvailabilityFactory.create_batch(5, room=room)
 
 
 
