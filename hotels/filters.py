@@ -8,11 +8,9 @@ class HotelFilter(django_filters.FilterSet):
     stars = django_filters.NumberFilter(field_name='stars')
     type = django_filters.CharFilter(field_name='type', lookup_expr='icontains')
 
-    # bu min va max price uchun alohida room degan model qoshish kerak
-    # min_price = django_filters.NumberFilter(field_name='')
-    # max_price = django_filters.NumberFilter(field_name='')
+    min_price = django_filters.NumberFilter(field_name='rooms_prices_main_price', lookup_expr='gte')
+    max_price = django_filters.NumberFilter(field_name='rooms_prices_main_price', lookup_expr='lte')
 
-    # bu uchun alohida HotelAmenities degan model qoshishim kerak
     amenities = django_filters.BaseInFilter(field_name='hotelamenity__name', lookup_expr='in')
 
     class Meta:
@@ -22,6 +20,8 @@ class HotelFilter(django_filters.FilterSet):
             'stars',
             'type',
             'amenities',
+            'min_price',
+            'max_price'
         ]
 
 
